@@ -1,5 +1,6 @@
 # Sed text processing and stream editor 
  ## Basic
+
 **Replace**
 ```sh
 sed -i 's/before/after/' file
