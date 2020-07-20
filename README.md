@@ -12,3 +12,7 @@ The approach of [thoughtbot/til](https://github.com/thoughtbot/til) really reson
 © 2019 MakerGYT. Distributed under the [Creative Commons Attribution-ShareAlike 4.0 International License](https://creativecommons.org/licenses/by-sa/4.0/).
 
 ## Content
+
+- 📋 [Sed-text-processing-and-stream-editor.](https://makergyt.github.io/til/Sed-text-processing-and-stream-editor.2020-07-20)  ········*2020-07-20*
+
+✍ Total 0 directories, 1 file
