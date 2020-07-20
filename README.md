@@ -13,6 +13,7 @@ The approach of [thoughtbot/til](https://github.com/thoughtbot/til) really reson
 
 ## Content
 
-- 📋 [Sed-text-processing-and-stream-editor.](https://makergyt.github.io/til/Sed-text-processing-and-stream-editor.2020-07-20)  ········*2020-07-20*
+- 📂 **linux**
+    - 📋 [Sed-text-processing-and-stream-editor.](https://makergyt.github.io/til/linux/Sed-text-processing-and-stream-editor.2020-07-20)  ········*2020-07-20*
 
-✍ Total 0 directories, 1 file
+✍ Total 1 directory, 1 file
