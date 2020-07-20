@@ -1,0 +1,103 @@
+# This is a basic workflow to help you get started with Actions
+
+name: sync issue
+
+# Controls when the action will run. Triggers the workflow on push or pull request
+# events but only for the master branch
+on:
+  issues:
+    types: [opened, edited, closed, reopened, labeled, unlabeled]
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+  # This workflow contains a single job called "build"
+  create:
+    # The type of runner that the job will run on
+    runs-on: ubuntu-latest
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+      - uses: actions/checkout@v2
+      - name: sync post
+        uses: actions/github-script@v2
+        with:
+          github-token: ${{secrets.GITHUB_TOKEN}}
+          # The non-owner will prompt to close after opening an issue
+          script: |
+            const fs = require('fs')
+            const path = require('path')
+            let {action, issue:{title, body, state, labels, created_at}, repository, label, sender} = context.payload
+            if(repository.owner.id !== sender.id) {
+              github.issues.createComment({
+                issue_number: context.issue.number,
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                body: '⚠ Private space, please do not initiate an issue privately, you can contact [me@makergyt.com](mailto:me@makergyt.com)'
+              })
+              github.issues.update({
+                issue_number: context.issue.number,
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                state: closed
+              });
+              return
+            }
+            body = `# ${title} \n ${body}`
+            const fileName = `${title.replace(/\s+/g, '-')}.${created_at.split("T")[0]}.md`
+            const dir = labels.length ? labels[0].name : ''
+            switch(action) {
+              case 'opened':
+              case 'edited':
+                if (state === 'closed') return
+                fs.writeFileSync(path.join(dir, fileName), body)
+                break;
+              case 'reopened':
+                if(dir !== '') fs.mkdirSync(dir,{ recursive: true })
+                fs.writeFileSync(path.join(dir, fileName), body)
+                break;
+              case 'closed':
+                fs.unlinkSync(path.join(dir, fileName))
+                fs.readdir(dir, function(err, files) {
+                  if (err) throw err;
+                  if(!files.length && dir !== '') fs.rmdirSync(dir)
+                })
+                break;
+              case 'labeled':
+                if (state === 'closed') return
+                fs.mkdirSync(label.name,{ recursive: true })
+                fs.rename(fileName, path.join(label.name, fileName), function (err) {
+                  if (err) throw err;
+                });
+                break;
+              case 'unlabeled':
+                if (state === 'closed') return
+                fs.rename(path.join(label.name, fileName), fileName, function (err) {
+                  if (err) throw err;
+                });
+                fs.readdir(label.name, function(err, files) {
+                  if (err) throw err;
+                  if(!files.length) fs.rmdirSync(label.name)
+                })
+                break;
+              }
+      # Set content, add links
+      - name: update README
+        env: 
+          OWNER: makergyt
+          REPO: til
+        run: |
+          sudo apt install tree
+          sed -i '15,$d' README.md 
+          tree -P "*.md" -I "README.md|tmp.md" -f > tmp.md
+          sed -i -e 's/│.*└──/  -/' -e 's/│.*├──/  -/' -e 's/├──/-/' -e 's/└──/-/' -e 's/\.md//' -e 's/\.//' tmp.md
+          sed -i -e 's/\/\(.*[^[:digit:]]$\)/📂 **\1**/' -e '$s/.*/✍ Total &/' tmp.md
+          sed -i -e 's/\/\(.*\.\)\(.*\)/📋 [\1](https:\/\/'$OWNER'.github.io\/'$REPO'&)  ········*\2*/' -e 's/\[.*\/\(.*\.\]\)/[\1/' tmp.md
+          cat tmp.md >> README.md && rm tmp.md
+      - name: Commit and push if changed
+        run: |
+          git diff
+          git config --global user.email "issue-bot@example.com"
+          git config --global user.name "issue-bot"
+          git add .
+          git commit -m "Updated content" || exit 0
+          git push origin master
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
