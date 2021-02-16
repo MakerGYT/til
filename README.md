@@ -13,8 +13,8 @@ The approach of [thoughtbot/til](https://github.com/thoughtbot/til) really reson
 
 ## Content
 
-- 📋 [Install-centos-via-WSL.](https://makergyt.github.io/til/Install-centos-via-WSL.2021-02-16)  ········*2021-02-16*
 - 📂 **linux**
+    - 📋 [Install-centos-via-WSL.](https://makergyt.github.io/til/linux/Install-centos-via-WSL.2021-02-16)  ········*2021-02-16*
     - 📋 [Sed-text-processing-and-stream-editor.](https://makergyt.github.io/til/linux/Sed-text-processing-and-stream-editor.2020-07-20)  ········*2020-07-20*
 
 ✍ Total 1 directory, 2 files
