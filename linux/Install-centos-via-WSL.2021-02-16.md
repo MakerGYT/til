@@ -1,5 +1,5 @@
 # Install centos via WSL 
- ## Basic tips
+ ### Basic tips
 - windows Version 1903 or higher
 - Enable the "Windows Subsystem for Linux" optional feature,Enable Virtual Machine feature
 - Set WSL 2 as your default version
@@ -7,6 +7,7 @@
 ## Note
 ### 1. Chocolatey
 > a software management solution that allows you to manage 100% of your software, anywhere you have Windows, with any endpoint management tool. 
+
 ```sh
 # run powershell(administrator), close protection software
 Get-ExecutionPolicy
@@ -15,6 +16,7 @@ Set-ExecutionPolicy Bypass -Scope Process -Force; [System.Net.ServicePointManage
 ```
 ### 2. LxRunOffline
 > A full-featured utility for managing Windows Subsystem for Linux (WSL)
+
 ```sh
 choco install lxrunoffline
 ```
